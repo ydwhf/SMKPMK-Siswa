@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Suara Jepangku</string>
+    <string name="welcome_back">WELCOME BACK</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account_register">Don\'t have an account? Register</string>
+    <string name="dashboard_admin">DASHBOARD ADMIN</string>
+    <string name="ikon_kelola_soal">Ikon Kelola Soal</string>
+    <string name="kelola_soal">Kelola Soal</string>
+    <string name="tambah_edit_dan_hapus_soal">Tambah, edit, dan hapus soal</string>
+    <string name="ikon_kelola_materi">Ikon Kelola Materi</string>
+    <string name="kelola_materi">Kelola Materi</string>
+    <string name="tambah_edit_dan_hapus_materi">Tambah, edit dan hapus materi</string>
+    <string name="ikon_skor_siswa">Ikon Skor Siswa</string>
+    <string name="skor_siswa">Skor Siswa</string>
+    <string name="lihat_hasil_nilai_dan_kemajuan_siswa">Lihat hasil nilai dan kemajuan siswa</string>
+    <string name="ikon_kelola_user">Ikon Kelola User</string>
+    <string name="kelola_siswa">Kelola Siswa</string>
+    <string name="tambah_dan_kelola_pengguna_sistem">Tambah dan kelola pengguna sistem</string>
+    <string name="please_enter_your_email_and_password">Please enter your email and password</string>
+    <string name="create_account">CREATE ACCOUNT</string>
+    <string name="please_fill_in_your_data_to_register">Please fill in your data to register</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">REGISTER</string>
+    <string name="already_have_an_account_log_in">Already have an account? Log in</string>
+</resources>

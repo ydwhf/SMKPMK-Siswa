@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "885212718177",
+    "firebase_url": "https://adminsuarajepangku-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "adminsuarajepangku",
+    "storage_bucket": "adminsuarajepangku.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885212718177:android:9e920b67981adf220c7620",
+        "android_client_info": {
+          "package_name": "com.bismillah.adminsmkpariwisata"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRRE1pFZKgqnCFtO-CHGLCayOFgrVFOSE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885212718177:android:8eab9caf0abb652e0c7620",
+        "android_client_info": {
+          "package_name": "com.bismillah.tesfft"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRRE1pFZKgqnCFtO-CHGLCayOFgrVFOSE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
