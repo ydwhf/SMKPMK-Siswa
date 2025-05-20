@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#5D5FEF</color>
+    <color name="primary_dark">#4A4BC2</color>
+    <color name="primary_light">#8587FF</color>
+    <color name="accent">#5D5FEF</color>
+    <color name="accent_green">#3ECF8E</color>
+    <color name="accent_red">#F86D70</color>
+    <color name="accent_blue">#4AA0D5</color>
+    <color name="gradient_start">#4AA0D5</color>
+    <color name="gradient_end">#5D5FEF</color>
+    <color name="text_primary">#2D3142</color>
+    <color name="text_secondary">#4F5D75</color>
+    <color name="background">#F5F5F5</color>
+    <color name="background_card">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 
     <color name="blue_primary">#3B82F6</color>
-    <color name="blue_200">#90CDF4</color>
+    <color name="blue_200">#33A6F1</color>
     <color name="blue_500">#3B82F6</color>
     <color name="blue_700">#1D4ED8</color>
-    <color name="amber_200">#FDE68A</color>
+    <color name="amber_200">#FFD83A</color>
     <color name="amber_700">#B45309</color>
     <color name="gray_50">#F9FAFB</color>
     <color name="gray_900">#111827</color>
+
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#8BC34A</color>
+    <color name="colorBackground">#F5F5F5</color>
+    <color name="colorText">#212121</color>
+    <color name="colorTextSecondary">#757575</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

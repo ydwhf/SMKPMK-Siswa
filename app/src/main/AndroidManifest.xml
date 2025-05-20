@@ -18,6 +18,9 @@
         android:theme="@style/Theme.TesFFT"
         tools:targetApi="31">
         <activity
+            android:name=".soal.SoalTema1Activity"
+            android:exported="false" />
+        <activity
             android:name=".register.RegisterActivity"
             android:exported="false" />
         <activity
@@ -34,8 +37,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"/>
-
+            android:exported="true" />
     </application>
 
 </manifest>

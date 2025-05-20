@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="24dp"
+    tools:context=".soal.SoalTema1Activity">
+
+    <TextView
+        android:id="@+id/tvSoal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="—"
+        android:textSize="32sp"/>
+    <Button
+        android:id="@+id/btnNextSoal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Next Soal"/>
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text=""
+        android:textSize="18sp"/>
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Ready to Record"
+        android:textSize="20sp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tvTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00:00"
+        android:textSize="56sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="64dp"/>
+
+    <ImageButton
+        android:id="@+id/btnRecord"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@android:drawable/ic_btn_speak_now"
+        android:contentDescription="Start Recording"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/btnStop"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@android:drawable/ic_media_pause" android:contentDescription="Stop Recording"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
+
+    <LinearLayout
+        android:id="@+id/postRecordingControls" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="48dp"
+        android:visibility="gone" tools:visibility="visible"> <ImageButton
+        android:id="@+id/btnSave"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@android:drawable/ic_menu_save" android:contentDescription="Save Recording"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:layout_marginEnd="16dp"/> <ImageButton
+        android:id="@+id/btnPlay"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@android:drawable/ic_media_play"
+        android:contentDescription="Play Last Recording"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:layout_marginEnd="16dp"/>
+
+        <ImageButton
+            android:id="@+id/btnPausePlayback"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@android:drawable/ic_media_pause"
+            android:contentDescription="Pause Playback"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="fitCenter"
+            android:visibility="gone"/> </LinearLayout>
+
+</LinearLayout>
