@@ -9,13 +9,11 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -47,12 +45,12 @@
                 android:textColor="@color/gray_50"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:text="30 Soal"
+                android:text="10 Soal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvTemaTitle2"
+                android:id="@+id/tvTemaTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -67,7 +65,7 @@
                 app:layout_constraintTop_toBottomOf="@id/ivTemaBanner" />
 
             <TextView
-                android:id="@+id/tvDeskripsi2"
+                android:id="@+id/tvDeskripsi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -80,10 +78,10 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTemaTitle2" />
+                app:layout_constraintTop_toBottomOf="@id/tvTemaTitle" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnMulai2"
+                android:id="@+id/btnMulai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -95,10 +93,10 @@
                 app:cornerRadius="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDeskripsi2" />
+                app:layout_constraintTop_toBottomOf="@id/tvDeskripsi" />
 
             <TextView
-                android:id="@+id/tvKesulitan2"
+                android:id="@+id/tvKesulitan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -106,18 +104,16 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/amber_700"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/btnMulai2"
+                android:text="Mudah"
+                app:layout_constraintBottom_toBottomOf="@id/btnMulai"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btnMulai2"
-                tools:text="Mudah" />
+                app:layout_constraintTop_toTopOf="@id/btnMulai" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -148,13 +144,13 @@
                 android:paddingBottom="4dp"
                 android:textColor="@color/gray_50"
                 android:textSize="12sp"
+                android:text="10 Soal"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="30 Soal" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvTemaTitle"
+                android:id="@+id/tvTemaTitle2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -163,13 +159,13 @@
                 android:textColor="@color/gray_900"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:text="Sekolah"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivTemaBanner2"
-                tools:text="Matematika Dasar" />
+                app:layout_constraintTop_toBottomOf="@id/ivTemaBanner2" />
 
             <TextView
-                android:id="@+id/tvDeskripsi"
+                android:id="@+id/tvDeskripsi2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -179,13 +175,13 @@
                 android:maxLines="2"
                 android:textColor="@color/gray_900"
                 android:textSize="14sp"
+                android:text="Kumpulan soal-soal bahasa Jepang mengenai sekolah"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTemaTitle"
-                tools:text="Kumpulan soal-soal matematika dasar untuk meningkatkan kemampuan berhitung dan logika." />
+                app:layout_constraintTop_toBottomOf="@id/tvTemaTitle2" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnMulai"
+                android:id="@+id/btnMulai2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -197,10 +193,10 @@
                 app:cornerRadius="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvDeskripsi" />
+                app:layout_constraintTop_toBottomOf="@id/tvDeskripsi2" />
 
             <TextView
-                android:id="@+id/tvKesulitan"
+                android:id="@+id/tvKesulitan2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -208,18 +204,16 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/amber_700"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/btnMulai"
+                android:text="Mudah"
+                app:layout_constraintBottom_toBottomOf="@id/btnMulai2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btnMulai"
-                tools:text="Mudah" />
+                app:layout_constraintTop_toTopOf="@id/btnMulai2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -249,11 +243,11 @@
                 android:paddingEnd="12dp"
                 android:paddingBottom="4dp"
                 android:textColor="@color/gray_50"
+                android:text="10 Soal"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="30 Soal" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/tvTemaTitle3"
@@ -265,10 +259,10 @@
                 android:textColor="@color/gray_900"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:text="Angka"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivTemaBanner3"
-                tools:text="Matematika Dasar" />
+                app:layout_constraintTop_toBottomOf="@id/ivTemaBanner3" />
 
             <TextView
                 android:id="@+id/tvDeskripsi3"
@@ -281,10 +275,10 @@
                 android:maxLines="2"
                 android:textColor="@color/gray_900"
                 android:textSize="14sp"
+                android:text="Kumpulan soal-soal bahasa Jepang mengenai angka"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTemaTitle3"
-                tools:text="Kumpulan soal-soal matematika dasar untuk meningkatkan kemampuan berhitung dan logika." />
+                app:layout_constraintTop_toBottomOf="@id/tvTemaTitle3" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnMulai3"
@@ -310,13 +304,14 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/amber_700"
                 android:textSize="14sp"
+                android:text="Mudah"
                 app:layout_constraintBottom_toBottomOf="@id/btnMulai3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/btnMulai3"
-                tools:text="Mudah" />
+                app:layout_constraintTop_toTopOf="@id/btnMulai3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
 </LinearLayout>
 </ScrollView>
