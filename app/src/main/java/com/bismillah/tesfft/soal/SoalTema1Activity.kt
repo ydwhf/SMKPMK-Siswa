@@ -15,11 +15,13 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.view.View
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bismillah.tesfft.FFTUtils
 import com.bismillah.tesfft.StringUtils
 import com.bismillah.tesfft.databinding.ActivitySoalTema1Binding
+import com.google.firebase.database.*
 import org.vosk.Model
 import org.vosk.Recognizer
 import org.vosk.android.StorageService
@@ -30,6 +32,10 @@ import java.io.IOException
 
 class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
     private lateinit var binding: ActivitySoalTema1Binding
+    private lateinit var databaseRef: DatabaseReference
+    private val soalList = mutableListOf<Soal>()
+    private var currentIndex = 0
+    private var currentSoal: String = ""
 
     companion object {
         const val REQUEST_PERM = 1001
@@ -61,8 +67,6 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
     // --- Speech Recognizer for Japanese Pronunciation ---
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var recIntent: Intent
-    private val soalList = listOf("りんご", "ねこ", "いぬ", "こんにちは")
-    private var currentSoal = ""
     private lateinit var voskModel: Model
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +78,15 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
 
         File(targetPath).apply { if (!exists()) mkdirs() }
 
+        databaseRef = FirebaseDatabase.getInstance(
+            "https://adminsuarajepangku-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        ).getReference("soal/percakapan_seharihari")
+
+        ambilDataSoal()
+
+        binding.btnNextSoal.setOnClickListener {
+            tampilkanSoalBerikutnya()
+        }
         binding.btnRecord.isEnabled = false
         binding.tvStatus.text = "Loading model…"
 
@@ -127,9 +140,9 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
             it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
         }
 
-        binding.btnNextSoal.setOnClickListener { nextSoal() }
-
-        nextSoal()
+//        binding.btnNextSoal.setOnClickListener { nextSoal() }
+//
+//        nextSoal()
     }
 
     private fun checkPermissions(): Boolean {
@@ -322,13 +335,13 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
     }
 
     // --- SpeechRecognizer for Pronunciation Test ---
-    private fun nextSoal() {
-        currentSoal = soalList.random()
-        binding.tvSoal.text = currentSoal
-        binding.tvResult.text = ""
-        // update prompt
-//         recIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
-    }
+//    private fun nextSoal() {
+//        currentSoal = soalList.random()
+//        binding.tvSoal.text = currentSoal
+//        binding.tvResult.text = ""
+//        // update prompt
+////         recIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
+//    }
 
     private fun startListening() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -369,5 +382,66 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         super.onDestroy()
         mediaPlayer?.release()
         speechRecognizer.destroy()
+    }
+
+    private fun ambilDataSoal() {
+        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                soalList.clear()
+                for (data in snapshot.children) {
+                    val soal = data.getValue(Soal::class.java)
+                    soal?.let { soalList.add(it) }
+                }
+                if (soalList.isNotEmpty()) {
+                    tampilkanSoal(0)
+                } else {
+                    binding.tvSoal.text = "Tidak ada soal"
+                    binding.tvSoalIndo.text = "-"
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@SoalTema1Activity, "Gagal ambil soal", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun tampilkanSoal(index: Int) {
+        currentIndex = index
+        val s = soalList[index]
+        currentSoal = s.japanese ?: ""
+        binding.tvSoal.text = s.japanese
+        binding.tvSoalIndo.text = s.indonesian
+        binding.btnPlaySoal.setOnClickListener {
+            s.audioUrl?.let { url ->
+                playAudio(url)
+            }
+        }
+        // Reset result & timer
+        binding.tvResult.text = ""
+        binding.tvTimer.text = "00:00:00"
+        binding.tvStatus.text = "Ready to Record"
+        // Siapkan intent recognizer Android (jika dipakai)
+        recIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
+            it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja-JP")
+            it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
+        }
+    }
+
+    private fun playAudio(audioUrl: String) {
+        val mediaPlayer = MediaPlayer().apply {
+            setDataSource(audioUrl)
+            prepare()
+            start()
+        }
+    }
+
+    private fun tampilkanSoalBerikutnya() {
+        if (soalList.isEmpty()) return
+
+        currentIndex++
+        if (currentIndex >= soalList.size) currentIndex = 0 // Loop ke awal
+
+        tampilkanSoal(currentIndex)
     }
 }

@@ -1,23 +1,10 @@
  package com.bismillah.tesfft
 
- import android.Manifest
  import android.content.Intent
- import android.content.pm.PackageManager
- import android.media.*
  import android.os.*
- import android.speech.RecognitionListener
- import android.speech.RecognizerIntent
- import android.speech.SpeechRecognizer
- import android.view.View
  import android.widget.Toast
  import androidx.appcompat.app.AppCompatActivity
- import androidx.core.app.ActivityCompat
- import androidx.core.content.ContextCompat
  import com.bismillah.tesfft.databinding.ActivityMainBinding
- import org.vosk.Model
- import org.vosk.Recognizer
- import org.vosk.android.StorageService
- import java.io.*
 
  class MainActivity : AppCompatActivity() {
      private lateinit var binding: ActivityMainBinding

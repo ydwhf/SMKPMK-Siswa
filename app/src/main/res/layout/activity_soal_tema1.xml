@@ -33,6 +33,32 @@
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvSoalIndo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="—"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="16dp"/>
+
+            <ImageButton
+                android:id="@+id/btnPlaySoal"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_media_play"
+                android:contentDescription="Play Soal"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:padding="12dp"
                 android:layout_marginBottom="16dp"/>
 
             <Button
