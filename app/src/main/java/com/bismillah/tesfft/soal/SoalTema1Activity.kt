@@ -85,8 +85,25 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         ambilDataSoal()
 
         binding.btnNextSoal.setOnClickListener {
+            // 1. Reset state rekaman apa pun yang masih jalan
+            if (isRecording) {
+                stopRecording()
+            }
+            handler.removeCallbacks(timerRunnable)
+
+            // 2. Reset UI ke mode sebelum rekam
+            binding.tvStatus.text = "Ready to Record"
+            binding.tvTimer.text = "00:00:00"
+            binding.tvResult.text = ""
+            binding.btnRecord.visibility = View.VISIBLE
+            binding.btnRecord.isEnabled = true
+            binding.btnStop.visibility = View.GONE
+            binding.postRecordingControls.visibility = View.GONE
+
+            // 3. Tampilkan soal berikutnya
             tampilkanSoalBerikutnya()
         }
+
         binding.btnRecord.isEnabled = false
         binding.tvStatus.text = "Loading model…"
 
@@ -439,9 +456,7 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
     private fun tampilkanSoalBerikutnya() {
         if (soalList.isEmpty()) return
 
-        currentIndex++
-        if (currentIndex >= soalList.size) currentIndex = 0 // Loop ke awal
-
+        currentIndex = (currentIndex + 1) % soalList.size
         tampilkanSoal(currentIndex)
     }
 }
