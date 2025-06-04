@@ -117,7 +117,7 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/holo_blue_dark"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="2dp"/>
 
             <TextView
                 android:id="@+id/tvTimer"

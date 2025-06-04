@@ -14,8 +14,10 @@ import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bismillah.tesfft.FFTUtils
@@ -29,6 +31,8 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
     private lateinit var binding: ActivitySoalTema1Binding
@@ -36,6 +40,12 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
     private val soalList = mutableListOf<Soal>()
     private var currentIndex = 0
     private var currentSoal: String = ""
+
+    private var score = 0
+    private var answeredCount = 0
+    private var answeredCurrent = false
+    private var totalQuestions = 0
+    private var userId: String? = null
 
     companion object {
         const val REQUEST_PERM = 1001
@@ -73,6 +83,9 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         super.onCreate(savedInstanceState)
         binding = ActivitySoalTema1Binding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        userId = intent.getStringExtra("userId")
+        Log.d("SoalTema1", "Received userId = $userId")
 
         val targetPath = "${filesDir.absolutePath}/model-small-ja"
 
@@ -326,14 +339,56 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
             val spoken = Regex("""\"text\"\s*:\s*"([^"]*)"""")
                 .find(hyp)?.groupValues?.get(1) ?: ""
             runOnUiThread {
-                binding.tvResult.text = if (spoken == currentSoal) {
-                    "✅ Terbaca: $spoken\nBenar!"
-                } else {
-                    "❌ Terbaca: $spoken"
+                if (!answeredCurrent) {
+                    answeredCurrent = true
+                    answeredCount++
+
+                    if (spoken == currentSoal) {
+                        score += 10
+                    }
+                }
+
+                // Tampilkan hasil untuk soal ini
+                binding.tvResult.text =
+                    if (spoken == currentSoal) "✅ Terbaca: $spoken\nBenar!"
+                    else "❌ Terbaca: $spoken"
+
+                // Jika semua soal sudah dijawab, panggil endTest()
+                if (answeredCount >= totalQuestions) {
+                    endTest()
                 }
             }
+
         }.start()
     }
+//    private fun recognizePronunciation() {
+//        if (!::voskModel.isInitialized) {
+//            binding.tvResult.text = "Model belum siap, tunggu sebentar…"
+//            return
+//        }
+//        binding.tvResult.text = "Recognizing…"
+//        Thread {
+//            val recognizer = Recognizer(voskModel, SoalTema1Activity.SAMPLE_RATE.toFloat())
+//            FileInputStream(wavFile).use { fis ->
+//                val buf = ByteArray(4096)
+//                while (true) {
+//                    val read = fis.read(buf)
+//                    if (read <= 0) break
+//                    recognizer.acceptWaveForm(buf, read)
+//                }
+//            }
+//            val hyp = recognizer.result
+//            val spoken = Regex("""\"text\"\s*:\s*"([^"]*)"""")
+//                .find(hyp)?.groupValues?.get(1) ?: ""
+//            runOnUiThread {
+//                binding.tvResult.text = if (spoken == currentSoal) {
+//                    "✅ Terbaca: $spoken\nBenar!"
+//                } else {
+//                    "❌ Terbaca: $spoken"
+//                }
+//            }
+//        }.start()
+//    }
 
 
     private fun pausePlayback() {
@@ -403,25 +458,49 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
 
     private fun ambilDataSoal() {
         databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+            override fun onDataChange(snap: DataSnapshot) {
                 soalList.clear()
-                for (data in snapshot.children) {
-                    val soal = data.getValue(Soal::class.java)
-                    soal?.let { soalList.add(it) }
-                }
-                if (soalList.isNotEmpty()) {
+                snap.children.mapNotNull { it.getValue(Soal::class.java) }
+                    .also { soalList.addAll(it) }
+
+                totalQuestions = soalList.size
+
+                if (totalQuestions > 0) {
+                    binding.btnNextSoal.isEnabled = true
                     tampilkanSoal(0)
                 } else {
                     binding.tvSoal.text = "Tidak ada soal"
                     binding.tvSoalIndo.text = "-"
                 }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@SoalTema1Activity, "Gagal ambil soal", Toast.LENGTH_SHORT).show()
+            override fun onCancelled(err: DatabaseError) {
+                Toast.makeText(this@SoalTema1Activity,
+                    "Gagal ambil soal", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
+//    private fun ambilDataSoal() {
+//        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(snapshot: DataSnapshot) {
+//                soalList.clear()
+//                for (data in snapshot.children) {
+//                    val soal = data.getValue(Soal::class.java)
+//                    soal?.let { soalList.add(it) }
+//                }
+//                if (soalList.isNotEmpty()) {
+//                    tampilkanSoal(0)
+//                } else {
+//                    binding.tvSoal.text = "Tidak ada soal"
+//                    binding.tvSoalIndo.text = "-"
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                Toast.makeText(this@SoalTema1Activity, "Gagal ambil soal", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//    }
 
     private fun tampilkanSoal(index: Int) {
         currentIndex = index
@@ -429,21 +508,47 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         currentSoal = s.japanese ?: ""
         binding.tvSoal.text = s.japanese
         binding.tvSoalIndo.text = s.indonesian
-        binding.btnPlaySoal.setOnClickListener {
-            s.audioUrl?.let { url ->
-                playAudio(url)
-            }
-        }
-        // Reset result & timer
+
+        // Reset state jawaban untuk soal ini
+        answeredCurrent = false
+
+        // Reset tampilan pengenalan & timer
         binding.tvResult.text = ""
-        binding.tvTimer.text = "00:00:00"
         binding.tvStatus.text = "Ready to Record"
-        // Siapkan intent recognizer Android (jika dipakai)
+        binding.tvTimer.text = "00:00:00"
+        binding.btnRecord.visibility = View.VISIBLE
+        binding.btnRecord.isEnabled = true
+        binding.btnStop.visibility = View.GONE
+        binding.postRecordingControls.visibility = View.GONE
+
+        // Setup recognizer prompt agar selalu up-to-date
         recIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
             it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja-JP")
             it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
         }
     }
+
+//    private fun tampilkanSoal(index: Int) {
+//        currentIndex = index
+//        val s = soalList[index]
+//        currentSoal = s.japanese ?: ""
+//        binding.tvSoal.text = s.japanese
+//        binding.tvSoalIndo.text = s.indonesian
+//        binding.btnPlaySoal.setOnClickListener {
+//            s.audioUrl?.let { url ->
+//                playAudio(url)
+//            }
+//        }
+//        // Reset result & timer
+//        binding.tvResult.text = ""
+//        binding.tvTimer.text = "00:00:00"
+//        binding.tvStatus.text = "Ready to Record"
+//        // Siapkan intent recognizer Android (jika dipakai)
+//        recIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
+//            it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja-JP")
+//            it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
+//        }
+//    }
 
     private fun playAudio(audioUrl: String) {
         val mediaPlayer = MediaPlayer().apply {
@@ -459,4 +564,45 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         currentIndex = (currentIndex + 1) % soalList.size
         tampilkanSoal(currentIndex)
     }
+
+    private fun endTest() {
+        // Matikan tombol rekam & Next
+        binding.btnRecord.isEnabled = false
+        binding.btnNextSoal.isEnabled = false
+
+        // Tampilkan dialog hasil
+        AlertDialog.Builder(this)
+            .setTitle("Tes Selesai")
+            .setMessage("Skor Anda: $score / ${totalQuestions * 10}")
+            .setPositiveButton("OK") { _, _ ->
+                // Simpan skor dan tanggal ke Firebase user
+                saveScoreToUser()
+                finish() // kembali ke MainActivity atau mana pun
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun saveScoreToUser() {
+        val uid = userId ?: return
+        val dbUser = FirebaseDatabase.getInstance(
+            "https://adminsuarajepangku-default-rtdb.asia-southeast1.firebasedatabase.app"
+        ).getReference("users/$uid")
+
+        val tanggalSekarang = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            .format(Date())
+
+        val updateMap = mapOf(
+            "skor" to score,
+            "lastTestDate" to tanggalSekarang
+        )
+        dbUser.updateChildren(updateMap).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Toast.makeText(this, "Skor berhasil disimpan", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Gagal simpan skor", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }
