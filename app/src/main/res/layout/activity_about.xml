@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Header Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="32dp">
+
+            <!-- App Icon -->
+            <ImageView
+                android:id="@+id/app_icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/ic_launcher"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_background"
+                android:padding="16dp"
+                android:scaleType="centerInside" />
+
+            <!-- App Name -->
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nihon Go"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary"
+                android:layout_marginBottom="8dp" />
+
+            <!-- App Version -->
+            <TextView
+                android:id="@+id/app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Version 1.0.0"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:background="@drawable/badge_background"
+                android:padding="8dp" />
+
+        </LinearLayout>
+
+        <!-- App Description Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/background_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About This App"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:id="@+id/app_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="This is a simple and elegant application designed to provide the best user experience. Built with modern Android development practices and Material Design principles."
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:lineSpacingExtra="4dp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Developer Info Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/background_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Developer"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    android:layout_marginBottom="12dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_baseline_person_24"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/small_circle_button"
+                        android:padding="8dp"
+                        android:scaleType="centerInside" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/developer_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Oktavian Tri Buana"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary" />
+
+                        <TextView
+                            android:id="@+id/developer_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="your.email@example.com"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_secondary" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- App Info Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/background_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="App Information"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Build Date -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Build Date"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary" />
+
+                    <TextView
+                        android:id="@+id/build_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="July 13, 2025"
+                        android:textSize="14sp"
+                        android:textColor="@color/primary" />
+
+                </LinearLayout>
+
+                <!-- Min SDK -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Min SDK Version"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary" />
+
+                    <TextView
+                        android:id="@+id/min_sdk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="API 21"
+                        android:textSize="14sp"
+                        android:textColor="@color/primary" />
+
+                </LinearLayout>
+
+                <!-- Target SDK -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Target SDK Version"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_secondary" />
+
+                    <TextView
+                        android:id="@+id/target_sdk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="API 34"
+                        android:textSize="14sp"
+                        android:textColor="@color/primary" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Copyright -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="© 2025 Your Company. All rights reserved."
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            android:gravity="center"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>

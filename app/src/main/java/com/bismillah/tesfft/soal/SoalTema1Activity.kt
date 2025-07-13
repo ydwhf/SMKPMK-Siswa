@@ -169,10 +169,6 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
             it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja-JP")
             it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
         }
-
-//        binding.btnNextSoal.setOnClickListener { nextSoal() }
-//
-//        nextSoal()
     }
 
     private fun checkPermissions(): Boolean {
@@ -361,35 +357,6 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
 
         }.start()
     }
-//    private fun recognizePronunciation() {
-//        if (!::voskModel.isInitialized) {
-//            binding.tvResult.text = "Model belum siap, tunggu sebentar…"
-//            return
-//        }
-//        binding.tvResult.text = "Recognizing…"
-//        Thread {
-//            val recognizer = Recognizer(voskModel, SoalTema1Activity.SAMPLE_RATE.toFloat())
-//            FileInputStream(wavFile).use { fis ->
-//                val buf = ByteArray(4096)
-//                while (true) {
-//                    val read = fis.read(buf)
-//                    if (read <= 0) break
-//                    recognizer.acceptWaveForm(buf, read)
-//                }
-//            }
-//            val hyp = recognizer.result
-//            val spoken = Regex("""\"text\"\s*:\s*"([^"]*)"""")
-//                .find(hyp)?.groupValues?.get(1) ?: ""
-//            runOnUiThread {
-//                binding.tvResult.text = if (spoken == currentSoal) {
-//                    "✅ Terbaca: $spoken\nBenar!"
-//                } else {
-//                    "❌ Terbaca: $spoken"
-//                }
-//            }
-//        }.start()
-//    }
-
 
     private fun pausePlayback() {
         mediaPlayer?.let {
@@ -405,15 +372,6 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
     private fun saveRecording() {
         binding.tvStatus.text = "Recording ready: ${wavFile.absolutePath}"
     }
-
-    // --- SpeechRecognizer for Pronunciation Test ---
-//    private fun nextSoal() {
-//        currentSoal = soalList.random()
-//        binding.tvSoal.text = currentSoal
-//        binding.tvResult.text = ""
-//        // update prompt
-////         recIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
-//    }
 
     private fun startListening() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -480,28 +438,6 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         })
     }
 
-//    private fun ambilDataSoal() {
-//        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                soalList.clear()
-//                for (data in snapshot.children) {
-//                    val soal = data.getValue(Soal::class.java)
-//                    soal?.let { soalList.add(it) }
-//                }
-//                if (soalList.isNotEmpty()) {
-//                    tampilkanSoal(0)
-//                } else {
-//                    binding.tvSoal.text = "Tidak ada soal"
-//                    binding.tvSoalIndo.text = "-"
-//                }
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                Toast.makeText(this@SoalTema1Activity, "Gagal ambil soal", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-
     private fun tampilkanSoal(index: Int) {
         currentIndex = index
         val s = soalList[index]
@@ -527,28 +463,6 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
             it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
         }
     }
-
-//    private fun tampilkanSoal(index: Int) {
-//        currentIndex = index
-//        val s = soalList[index]
-//        currentSoal = s.japanese ?: ""
-//        binding.tvSoal.text = s.japanese
-//        binding.tvSoalIndo.text = s.indonesian
-//        binding.btnPlaySoal.setOnClickListener {
-//            s.audioUrl?.let { url ->
-//                playAudio(url)
-//            }
-//        }
-//        // Reset result & timer
-//        binding.tvResult.text = ""
-//        binding.tvTimer.text = "00:00:00"
-//        binding.tvStatus.text = "Ready to Record"
-//        // Siapkan intent recognizer Android (jika dipakai)
-//        recIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
-//            it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja-JP")
-//            it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
-//        }
-//    }
 
     private fun playAudio(audioUrl: String) {
         val mediaPlayer = MediaPlayer().apply {
@@ -604,5 +518,4 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
             }
         }
     }
-
 }

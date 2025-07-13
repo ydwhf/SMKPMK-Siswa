@@ -5,6 +5,7 @@
  import android.util.Log
  import android.widget.Toast
  import androidx.appcompat.app.AppCompatActivity
+ import com.bismillah.tesfft.about.AboutActivity
  import com.bismillah.tesfft.databinding.ActivityMainBinding
 
  class MainActivity : AppCompatActivity() {
@@ -44,7 +45,7 @@
          binding.cardTentang.setOnClickListener {
              Toast.makeText(this, "Menu Tentang dipilih", Toast.LENGTH_SHORT).show()
              // Tambahkan intent untuk berpindah ke halaman Tentang
-             // startActivity(Intent(this, TentangActivity::class.java))
+              startActivity(Intent(this, AboutActivity::class.java))
          }
      }
  }
