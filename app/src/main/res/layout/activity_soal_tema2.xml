@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:padding="24dp"
-        tools:context=".soal.SoalTema1Activity">
+        tools:context=".soal.SoalTema2Activity">
 
         <!-- Header Section -->
         <LinearLayout
