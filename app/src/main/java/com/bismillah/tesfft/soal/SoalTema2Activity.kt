@@ -40,6 +40,7 @@ class SoalTema2Activity : AppCompatActivity(), RecognitionListener {
     private val soalList = mutableListOf<Soal>()
     private var currentIndex = 0
     private var currentSoal: String = ""
+    private var currentTheme: String? = null
 
     private var score = 0
     private var answeredCount = 0
@@ -85,6 +86,7 @@ class SoalTema2Activity : AppCompatActivity(), RecognitionListener {
         setContentView(binding.root)
 
         userId = intent.getStringExtra("userId")
+        currentTheme = intent.getStringExtra("theme")
 
         val targetPath = "${filesDir.absolutePath}/model-small-ja"
 
@@ -497,32 +499,37 @@ class SoalTema2Activity : AppCompatActivity(), RecognitionListener {
             .setMessage("Skor Anda: $score / ${totalQuestions * 10}")
             .setPositiveButton("OK") { _, _ ->
                 // Simpan skor dan tanggal ke Firebase user
-                saveScoreToUser()
+                saveScore()
                 finish() // kembali ke MainActivity atau mana pun
             }
             .setCancelable(false)
             .show()
     }
 
-    private fun saveScoreToUser() {
-        val uid = userId ?: return
-        val dbUser = FirebaseDatabase.getInstance(
+    private fun saveScore() {
+        val shared = getSharedPreferences("APP_AUTH", MODE_PRIVATE)
+        val uid = shared.getString("userId", null)
+        val username = shared.getString("username", null)
+
+        val scoreRef = FirebaseDatabase.getInstance(
             "https://adminsuarajepangku-default-rtdb.asia-southeast1.firebasedatabase.app"
-        ).getReference("users/$uid")
+        ).getReference("scores/$uid")
 
-        val tanggalSekarang = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            .format(Date())
+        val scoreId = scoreRef.push().key ?: return
 
-        val updateMap = mapOf(
-            "skor" to score,
-            "lastTestDate" to tanggalSekarang
+        val dateNow = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+        val scoreData = mapOf(
+            "username" to username,
+            "score" to score,
+            "theme" to currentTheme, // lu sesuaikan dengan variabel lu
+            "date" to dateNow
         )
-        dbUser.updateChildren(updateMap).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Toast.makeText(this, "Skor berhasil disimpan", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Gagal simpan skor", Toast.LENGTH_SHORT).show()
-            }
+
+        scoreRef.child(scoreId).setValue(scoreData).addOnSuccessListener {
+            Toast.makeText(this, "Score Saved!", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Failed save score!", Toast.LENGTH_SHORT).show()
         }
     }
 }

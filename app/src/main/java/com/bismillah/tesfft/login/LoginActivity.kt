@@ -39,8 +39,12 @@ class LoginActivity : AppCompatActivity() {
                                 val pass = userSnap.child("password").value.toString()
                                 if (pass == password) {
                                     val userId = userSnap.key.toString()
+                                    val shared = getSharedPreferences("APP_AUTH", MODE_PRIVATE)
+                                    val edit = shared.edit()
+                                    edit.putString("userId", userId)
+                                    edit.putString("username", username)
+                                    edit.apply()
                                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                    intent.putExtra("userId", userId)
                                     startActivity(intent)
                                     finish()
                                 } else {

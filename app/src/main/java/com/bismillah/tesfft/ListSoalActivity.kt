@@ -23,18 +23,21 @@ class ListSoalActivity : AppCompatActivity() {
         {
             val intent = Intent(this@ListSoalActivity, SoalTema1Activity::class.java)
             intent.putExtra("userId", userId)
+            intent.putExtra("theme", "percakapan_seharihari")
             startActivity(intent)
         }
         binding.btnMulai2.setOnClickListener()
         {
             val intent = Intent(this@ListSoalActivity, SoalTema2Activity::class.java)
             intent.putExtra("userId", userId)
+            intent.putExtra("theme", "sekolah")
             startActivity(intent)
         }
         binding.btnMulai3.setOnClickListener()
         {
             val intent = Intent(this@ListSoalActivity, SoalTema3Activity::class.java)
             intent.putExtra("userId", userId)
+            intent.putExtra("theme", "angka")
             startActivity(intent)
         }
     }
