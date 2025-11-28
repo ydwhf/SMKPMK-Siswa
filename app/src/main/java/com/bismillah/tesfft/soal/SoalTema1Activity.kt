@@ -97,6 +97,14 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
 
         ambilDataSoal()
 
+        binding.btnPlaySoal.setOnClickListener{
+            val url = soalList[currentIndex].audioUrl
+            if (!url.isNullOrEmpty()) {
+                playAudio(url)
+            } else {
+                Toast.makeText(this, "Audio tidak tersedia!", Toast.LENGTH_SHORT).show()
+            }
+        }
         binding.btnNextSoal.setOnClickListener {
             // 1. Reset state rekaman apa pun yang masih jalan
             if (isRecording) {
