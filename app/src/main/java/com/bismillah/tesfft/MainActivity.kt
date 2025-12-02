@@ -7,6 +7,7 @@
  import androidx.appcompat.app.AppCompatActivity
  import com.bismillah.tesfft.about.AboutActivity
  import com.bismillah.tesfft.databinding.ActivityMainBinding
+ import com.bismillah.tesfft.scores.StudentScoreActivity
 
  class MainActivity : AppCompatActivity() {
      private lateinit var binding: ActivityMainBinding
@@ -39,7 +40,9 @@
          binding.cardSkor.setOnClickListener {
              Toast.makeText(this, "Menu Skor dipilih", Toast.LENGTH_SHORT).show()
              // Tambahkan intent untuk berpindah ke halaman Skor
-             // startActivity(Intent(this, SkorActivity::class.java))
+             val intent = Intent(this@MainActivity, StudentScoreActivity::class.java)
+             intent.putExtra("userId", userId)
+             startActivity(intent)
          }
 
          binding.cardTentang.setOnClickListener {

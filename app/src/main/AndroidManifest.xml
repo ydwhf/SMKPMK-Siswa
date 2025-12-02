@@ -18,6 +18,9 @@
         android:theme="@style/Theme.TesFFT"
         tools:targetApi="31">
         <activity
+            android:name=".scores.StudentScoreActivity"
+            android:exported="false" />
+        <activity
             android:name=".soal.SoalTema3Activity"
             android:exported="false" />
         <activity

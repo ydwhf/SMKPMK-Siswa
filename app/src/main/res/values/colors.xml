@@ -32,4 +32,21 @@
     <color name="colorText">#212121</color>
     <color name="colorTextSecondary">#757575</color>
     <color name="colorWhite">#FFFFFF</color>
+
+    <!-- Base Colors -->
+    <color name="background_gradient">#F8FAFC</color>
+    <color name="text_hint">#94A3B8</color>
+    <color name="divider">#E2E8F0</color>
+
+    <!-- Score Colors -->
+    <color name="emerald_light">#D1FAE5</color>
+    <color name="emerald_dark">#059669</color>
+    <color name="blue_light">#DBEAFE</color>
+    <color name="blue_dark">#2563EB</color>
+    <color name="amber_light">#FEF3C7</color>
+    <color name="amber_dark">#D97706</color>
+
+    <!-- Header -->
+    <color name="header_gradient_start">#6366F1</color>
+    <color name="header_gradient_end">#9333EA</color>
 </resources>
