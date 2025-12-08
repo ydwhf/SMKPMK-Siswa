@@ -36,9 +36,7 @@ class RegisterActivity : AppCompatActivity() {
                             val userId = db.push().key!!
                             val userMap = mapOf(
                                 "username" to username,
-                                "password" to password,
-                                "skor" to 0,
-                                "lastTestDate" to ""
+                                "password" to password
                             )
                             db.child(userId).setValue(userMap).addOnCompleteListener {
                                 if (it.isSuccessful) {

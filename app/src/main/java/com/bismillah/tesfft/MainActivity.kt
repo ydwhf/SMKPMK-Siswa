@@ -7,6 +7,7 @@
  import androidx.appcompat.app.AppCompatActivity
  import com.bismillah.tesfft.about.AboutActivity
  import com.bismillah.tesfft.databinding.ActivityMainBinding
+ import com.bismillah.tesfft.materi.DaftarMateriActivity
  import com.bismillah.tesfft.scores.StudentScoreActivity
 
  class MainActivity : AppCompatActivity() {
@@ -34,7 +35,7 @@
          binding.cardMateri.setOnClickListener {
              Toast.makeText(this, "Menu Materi dipilih", Toast.LENGTH_SHORT).show()
              // Tambahkan intent untuk berpindah ke halaman Materi
-             // startActivity(Intent(this, MateriActivity::class.java))
+              startActivity(Intent(this, DaftarMateriActivity::class.java))
          }
 
          binding.cardSkor.setOnClickListener {
