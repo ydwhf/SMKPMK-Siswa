@@ -1,7 +1,6 @@
 package com.bismillah.tesfft.soal
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -11,30 +10,25 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.speech.RecognitionListener
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bismillah.tesfft.FFTUtils
-import com.bismillah.tesfft.StringUtils
 import com.bismillah.tesfft.databinding.ActivitySoalTema1Binding
 import com.google.firebase.database.*
-import org.vosk.Model
-import org.vosk.Recognizer
-import org.vosk.android.StorageService
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.api.gax.core.FixedCredentialsProvider
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.cloud.speech.v1.*
+import com.google.protobuf.ByteString
 
-class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
+class SoalTema1Activity : AppCompatActivity() {
     private lateinit var binding: ActivitySoalTema1Binding
     private lateinit var databaseRef: DatabaseReference
     private val soalList = mutableListOf<Soal>()
@@ -75,10 +69,8 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         }
     }
 
-    // --- Speech Recognizer for Japanese Pronunciation ---
-    private lateinit var speechRecognizer: SpeechRecognizer
-    private lateinit var recIntent: Intent
-    private lateinit var voskModel: Model
+    // --- Google Cloud STT ---
+    private var speechClient: SpeechClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,9 +80,7 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         userId = intent.getStringExtra("userId")
         currentTheme = intent.getStringExtra("theme")
 
-        val targetPath = "${filesDir.absolutePath}/model-small-ja"
-
-        File(targetPath).apply { if (!exists()) mkdirs() }
+        initGoogleCloud()
 
         databaseRef = FirebaseDatabase.getInstance(
             "https://adminsuarajepangku-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -127,29 +117,8 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         }
 
         binding.btnRecord.isEnabled = false
-        binding.tvStatus.text = "Loading model…"
+        binding.tvStatus.text = "Initializing Cloud API..."
 
-        StorageService.unpack(
-            this,
-            "model-small-ja",  // kalau kamu taruh zip di assets
-            targetPath,
-            object : StorageService.Callback<Model> {
-                override fun onComplete(model: Model) {
-                    voskModel = model
-                    runOnUiThread {
-                        binding.tvStatus.text = "Model siap!"
-                        binding.btnRecord.isEnabled = true  // baru enable di sini
-                    }
-                }
-            },
-            object : StorageService.Callback<IOException> {
-                override fun onComplete(e: IOException) {
-                    runOnUiThread {
-                        binding.tvStatus.text = "Unpack error: ${e.message}"
-                    }
-                }
-            }
-        )
         binding.btnRecord.setOnClickListener {
             if (!isRecording) {
                 if (checkPermissions()) startRecording()
@@ -166,18 +135,6 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         binding.btnSave.setOnClickListener { saveRecording() }
         binding.btnPlay.setOnClickListener { playRecording() }
         binding.btnPausePlayback.setOnClickListener { pausePlayback() }
-
-        // --- Setup SpeechRecognizer ---
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this).apply {
-            setRecognitionListener(this@SoalTema1Activity)
-        }
-        recIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
-            it.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja-JP")
-            it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
-        }
     }
 
     private fun checkPermissions(): Boolean {
@@ -324,47 +281,100 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         binding.btnPausePlayback.visibility = View.VISIBLE
     }
 
+    private fun initGoogleCloud() {
+        try {
+            // Taruh file JSON Service Account di folder: app/src/main/assets/google-creds.json
+            assets.open("google-creds.json").use { isStream ->
+                val credentials = GoogleCredentials.fromStream(isStream)
+                val settings = SpeechSettings.newBuilder()
+                    .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                    .build()
+                speechClient = SpeechClient.create(settings)
+            }
+            binding.tvStatus.text = "Google Cloud Ready!"
+            binding.btnRecord.isEnabled = true
+        } catch (e: Exception) {
+            binding.tvStatus.text = "Gagal init Google: ${e.message}"
+            e.printStackTrace()
+        }
+    }
+
     private fun recognizePronunciation() {
-        if (!::voskModel.isInitialized) {
-            binding.tvResult.text = "Model belum siap, tunggu sebentar…"
+        if (speechClient == null) {
+            binding.tvResult.text = "Google API belum siap!"
             return
         }
-        binding.tvResult.text = "Recognizing…"
+
+        binding.tvResult.text = "Sedang mengenali suara..."
+
+        // Pake Thread biar UI gak freeze (Synchronous call)
         Thread {
-            val recognizer = Recognizer(voskModel, SoalTema1Activity.SAMPLE_RATE.toFloat())
-            FileInputStream(wavFile).use { fis ->
-                val buf = ByteArray(4096)
-                while (true) {
-                    val read = fis.read(buf)
-                    if (read <= 0) break
-                    recognizer.acceptWaveForm(buf, read)
+            try {
+                // Baca file WAV hasil rekaman
+                val audioBytes = wavFile.readBytes()
+                val audioContent = ByteString.copyFrom(audioBytes)
+
+                // Setup Config: Sesuaikan dengan SAMPLE_RATE variabel lu (44100)
+                val config = RecognitionConfig.newBuilder()
+                    .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
+                    .setSampleRateHertz(SoalTema1Activity.SAMPLE_RATE)
+                    .setLanguageCode("ja-JP") // Bahasa Jepang
+                    .setEnableAutomaticPunctuation(false)
+                    .build()
+
+                val audio = RecognitionAudio.newBuilder()
+                    .setContent(audioContent)
+                    .build()
+
+                // Tembak ke API
+                val response = speechClient?.recognize(config, audio)
+                val results = response?.resultsList
+
+                // Ambil transcript hasil pertama
+                val spoken = if (!results.isNullOrEmpty()) {
+                    results[0].alternativesList[0].transcript
+                } else {
+                    ""
+                }
+
+                runOnUiThread {
+                    // Balikin ke logic scoring lu
+                    handleHasilGoogle(spoken)
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    binding.tvResult.text = "Error API: ${e.message}"
                 }
             }
-            val hyp = recognizer.result
-            val spoken = Regex("""\"text\"\s*:\s*"([^"]*)"""")
-                .find(hyp)?.groupValues?.get(1) ?: ""
-            runOnUiThread {
-                if (!answeredCurrent) {
-                    answeredCurrent = true
-                    answeredCount++
-
-                    if (spoken == currentSoal) {
-                        score += 10
-                    }
-                }
-
-                // Tampilkan hasil untuk soal ini
-                binding.tvResult.text =
-                    if (spoken == currentSoal) "✅ Terbaca: $spoken\nBenar!"
-                    else "❌ Terbaca: $spoken"
-
-                // Jika semua soal sudah dijawab, panggil endTest()
-                if (answeredCount >= totalQuestions) {
-                    endTest()
-                }
-            }
-
         }.start()
+    }
+
+    private fun handleHasilGoogle(spoken: String) {
+        if (!answeredCurrent) {
+            answeredCurrent = true
+            answeredCount++
+
+            // Logic scoring lu: bandingin input vs soal
+            if (spoken.trim().equals(currentSoal.trim(), ignoreCase = true)) {
+                score += 10
+            }
+        }
+
+        binding.tvResult.text = if (spoken.isNotEmpty()) {
+            if (spoken.trim().equals(currentSoal.trim(), ignoreCase = true)) {
+                "✅ Terbaca: $spoken\nBenar!"
+            } else {
+                "❌ Terbaca: $spoken\n(Coba lagi!)"
+            }
+        } else {
+            "❌ Suara tidak terdeteksi"
+        }
+
+        if (answeredCount >= totalQuestions) {
+            endTest()
+        }
     }
 
     private fun pausePlayback() {
@@ -382,45 +392,10 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         binding.tvStatus.text = "Recording ready: ${wavFile.absolutePath}"
     }
 
-    private fun startListening() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.RECORD_AUDIO), SoalTema1Activity.REQUEST_PERM
-            )
-            return
-        }
-        binding.tvResult.text = "Listening..."
-        speechRecognizer.startListening(recIntent)
-    }
-
-    // RecognitionListener callbacks
-    override fun onResults(results: Bundle) {
-        val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-        val heard = matches?.firstOrNull() ?: ""
-        val sim = StringUtils.similarity(heard, currentSoal)
-        binding.tvResult.text = if (heard == currentSoal) {
-            "✅ Terbaca: $heard\nJawaban benar!"
-        } else {
-            "❌ Terbaca: $heard\nSimilarity: $sim%"
-        }
-    }
-    override fun onError(error: Int) {
-        binding.tvResult.text = "Error listening: $error"
-    }
-    // Unused overrides
-    override fun onReadyForSpeech(params: Bundle?) {}
-    override fun onBeginningOfSpeech() {}
-    override fun onRmsChanged(rmsdB: Float) {}
-    override fun onBufferReceived(buffer: ByteArray?) {}
-    override fun onEndOfSpeech() {}
-    override fun onPartialResults(partialResults: Bundle?) {}
-    override fun onEvent(eventType: Int, params: Bundle?) {}
-
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer?.release()
-        speechRecognizer.destroy()
+        speechClient?.shutdown() // Jangan lupa shutdown client
     }
 
     private fun ambilDataSoal() {
@@ -465,12 +440,6 @@ class SoalTema1Activity : AppCompatActivity(), RecognitionListener {
         binding.btnRecord.isEnabled = true
         binding.btnStop.visibility = View.GONE
         binding.postRecordingControls.visibility = View.GONE
-
-        // Setup recognizer prompt agar selalu up-to-date
-        recIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
-            it.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja-JP")
-            it.putExtra(RecognizerIntent.EXTRA_PROMPT, "Ucapkan: $currentSoal")
-        }
     }
 
     private fun playAudio(audioUrl: String) {
