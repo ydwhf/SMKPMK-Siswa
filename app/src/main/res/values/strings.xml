@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Nihon Go</string>
-    <string name="welcome_back">WELCOME BACK</string>
+    <string name="welcome_back">こんにちは</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -18,7 +18,7 @@
     <string name="ikon_kelola_user">Ikon Kelola User</string>
     <string name="kelola_siswa">Kelola Siswa</string>
     <string name="tambah_dan_kelola_pengguna_sistem">Tambah dan kelola pengguna sistem</string>
-    <string name="please_enter_your_email_and_password">Please enter your email and password</string>
+    <string name="please_enter_your_email_and_password">Please enter your username and password</string>
     <string name="create_account">CREATE ACCOUNT</string>
     <string name="please_fill_in_your_data_to_register">Please fill in your data to register</string>
     <string name="confirm_password">Confirm Password</string>
