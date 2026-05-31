@@ -83,8 +83,9 @@
                     android:id="@+id/app_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="This is a simple and elegant application designed to provide the best user experience. Built with modern Android development practices and Material Design principles."
+                    android:text="Aplikasi pembelajaran interaktif yang dirancang khusus untuk membantu siswa SMK dalam melatih kemampuan pelafalan Bahasa Jepang. Aplikasi ini menggunakan teknologi pengenalan suara untuk memberikan umpan balik instan, sehingga belajar Bahasa Jepang menjadi lebih praktis, menyenangkan, dan efektif."
                     android:textSize="14sp"
+                    android:justificationMode="inter_word"
                     android:textColor="@color/text_secondary"
                     android:lineSpacingExtra="4dp" />
 
@@ -151,7 +152,7 @@
                             android:id="@+id/developer_email"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="your.email@example.com"
+                            android:text="oktaviantribuana@gmail.com"
                             android:textSize="14sp"
                             android:textColor="@color/text_secondary" />
 
@@ -231,7 +232,7 @@
                         android:id="@+id/min_sdk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="API 21"
+                        android:text="API 21 (Android 5.0 Lollipop)"
                         android:textSize="14sp"
                         android:textColor="@color/primary" />
 
@@ -255,7 +256,7 @@
                         android:id="@+id/target_sdk"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="API 34"
+                        android:text="API 34 (Android 14)"
                         android:textSize="14sp"
                         android:textColor="@color/primary" />
 
@@ -264,16 +265,6 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
-        <!-- Copyright -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="© 2025 Your Company. All rights reserved."
-            android:textSize="12sp"
-            android:textColor="@color/text_secondary"
-            android:gravity="center"
-            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 

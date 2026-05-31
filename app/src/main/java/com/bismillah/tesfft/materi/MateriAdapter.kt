@@ -25,14 +25,14 @@ class MateriAdapter(
         holder.binding.tvJudul.text = item.judul
         holder.binding.tvDeskripsi.text = item.deskripsi
 
-//        holder.itemView.setOnClickListener {
-//            val ctx = holder.itemView.context
-//            val intent = Intent(ctx, DetailMateriActivity::class.java)
-//            intent.putExtra("id", item.id)
-//            intent.putExtra("judul", item.judul)
-//            intent.putExtra("deskripsi", item.deskripsi)
-//            ctx.startActivity(intent)
-//        }
+        holder.itemView.setOnClickListener {
+            val ctx = holder.itemView.context
+            val intent = Intent(ctx, DetailMateriActivity::class.java)
+            intent.putExtra("id", item.id)
+            intent.putExtra("judul", item.judul)
+            intent.putExtra("deskripsi", item.deskripsi)
+            ctx.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = list.size
