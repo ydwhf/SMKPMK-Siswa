@@ -38,12 +38,14 @@ class StudentScoreActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listScores.clear()
 
-                for (level1 in snapshot.children) {          // -OfA7CHoUGcFyVEIGlZO
-                    for (level2 in level1.children) {       // -OfA9e4AThUq5VrfIGId
+                for (level1 in snapshot.children) {
+                    for (level2 in level1.children) {
                         val score = level2.getValue(Score::class.java)
                         if (score != null) listScores.add(score)
                     }
                 }
+
+                listScores.sortByDescending { it.date }
 
                 adapter.notifyDataSetChanged()
             }

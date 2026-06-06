@@ -259,7 +259,7 @@
                 android:textColor="@color/gray_900"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:text="Angka"
+                android:text="Rumah dan Keluarga"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ivTemaBanner3" />
@@ -275,7 +275,7 @@
                 android:maxLines="2"
                 android:textColor="@color/gray_900"
                 android:textSize="14sp"
-                android:text="Kumpulan soal-soal bahasa Jepang mengenai angka"
+                android:text="Kumpulan soal-soal bahasa Jepang mengenai rumah dan keluarga"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTemaTitle3" />
